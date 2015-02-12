@@ -189,7 +189,7 @@ class medoo
 
 	protected function column_quote($string)
 	{
-		return '"' . str_replace('.', '"."', preg_replace('/(^#|\(JSON\))/', '', $string)) . '"';
+		return '`' . str_replace('.', '`.`', preg_replace('/(^#|\(JSON\))/', '', $string)) . '`';
 	}
 
 	protected function column_push($columns)
@@ -526,7 +526,7 @@ class medoo
 
 	protected function select_context($table, $join, &$columns = null, $where = null, $column_fn = null)
 	{
-		$table = '"' . $table . '"';
+		$table = '`' . $table . '`';
 		$join_key = is_array($join) ? array_keys($join) : null;
 
 		if (
@@ -692,7 +692,7 @@ class medoo
 				}
 			}
 
-			$this->exec('INSERT INTO "' . $table . '" (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')');
+			$this->exec('INSERT INTO `' . $table . '` (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')');
 
 			$lastId[] = $this->pdo->lastInsertId();
 		}
@@ -746,12 +746,12 @@ class medoo
 			}
 		}
 
-		return $this->exec('UPDATE "' . $table . '" SET ' . implode(', ', $fields) . $this->where_clause($where));
+		return $this->exec('UPDATE `' . $table . '` SET ' . implode(', ', $fields) . $this->where_clause($where));
 	}
 
 	public function delete($table, $where)
 	{
-		return $this->exec('DELETE FROM "' . $table . '"' . $this->where_clause($where));
+		return $this->exec('DELETE FROM `' . $table . '`' . $this->where_clause($where));
 	}
 
 	public function replace($table, $columns, $search = null, $replace = null, $where = null)
@@ -791,7 +791,7 @@ class medoo
 			}
 		}
 
-		return $this->exec('UPDATE "' . $table . '" SET ' . $replace_query . $this->where_clause($where));
+		return $this->exec('UPDATE `' . $table . '` SET ' . $replace_query . $this->where_clause($where));
 	}
 
 	public function get($table, $join = null, $column = null, $where = null)
